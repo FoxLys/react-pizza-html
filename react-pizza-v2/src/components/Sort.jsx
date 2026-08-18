@@ -26,7 +26,7 @@ function Sort() {
 						fill='#2C2C2C'
 					/>
 				</svg>
-				<b onClick={() => setOpen(!open)}>Сортировка по:</b>
+				<b onClick={() => setOpen(!open)}>Сортировка&nbsp;по:</b>
 				<span onClick={() => setOpen(!open)}>{whatIChoose}</span>
 			</div>
 			{open && (
