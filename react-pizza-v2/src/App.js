@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router';
 
 import NotFound from '../src/pages/NotFound';
 import Home from '../src/pages/Home';
+import Cart from '../src/pages/Cart';
 import Header from './components/Header';
 import './scss/app.scss';
 
@@ -17,6 +18,7 @@ function App() {
 					{/* {pathname === '/' && <Home />} */}
 					<Routes>
 						<Route path='/' element={<Home />} />
+						<Route path='/cart' element={<Cart />} />
 						<Route path='*' element={<NotFound />} />
 					</Routes>
 				</div>
