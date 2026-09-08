@@ -1,17 +1,44 @@
 import React from 'react';
 function Sort({ sortValue, onChangeSort }) {
 	const sortName = [
-		{ name: 'популярности', sortProperty: 'rating' },
-		{ name: 'цене', sortProperty: 'price' },
-		{ name: 'алфавиту', sortProperty: 'title' },
+		{
+			name: 'популярности (DESC)',
+			sortProperty: 'rating',
+			order: 'desc',
+		},
+		{
+			name: 'популярности (ASC)',
+			sortProperty: 'rating',
+			order: 'asc',
+		},
+		{
+			name: 'цене (DESC)',
+			sortProperty: 'price',
+			order: 'desc',
+		},
+		{
+			name: 'цене (ASC)',
+			sortProperty: 'price',
+			order: 'asc',
+		},
+		{
+			name: 'алфавиту (DESC)',
+			sortProperty: 'title',
+			order: 'desc',
+		},
+		{
+			name: 'алфавиту (ASC)',
+			sortProperty: 'title',
+			order: 'asc',
+		},
 	];
-	const [whatIChoose, setWhatIChoose] = React.useState('популярности');
 	const [open, setOpen] = React.useState(false);
 
-	const onClickSortLabel = (name, index) => {
-		onChangeSort(index);
-		setWhatIChoose(name);
-	};
+	const currentSort = sortName.find(
+		obj =>
+			obj.sortProperty === sortValue.sortProperty &&
+			obj.order === sortValue.order,
+	);
 
 	return (
 		<div className='sort'>
@@ -30,16 +57,21 @@ function Sort({ sortValue, onChangeSort }) {
 					/>
 				</svg>
 				<b onClick={() => setOpen(!open)}>Сортировка&nbsp;по:</b>
-				<span onClick={() => setOpen(!open)}>{whatIChoose}</span>
+				<span onClick={() => setOpen(!open)}>{currentSort.name}</span>
 			</div>
 			{open && (
 				<div className='sort__popup'>
 					<ul>
-						{sortName.map((obj, index) => (
+						{sortName.map(obj => (
 							<li
-								key={index}
-								onClick={() => onClickSortLabel(obj.name, index)}
-								className={sortValue === index ? 'active' : ''}
+								key={`${obj.sortProperty} - ${obj.order}`}
+								onClick={() => onChangeSort(obj)}
+								className={
+									sortValue.sortProperty === obj.sortProperty &&
+									sortValue.order === obj.order
+										? 'active'
+										: ''
+								}
 							>
 								{obj.name}
 							</li>

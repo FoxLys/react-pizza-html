@@ -2,8 +2,6 @@ import React from 'react';
 function Sort1() {
 	const [open, setOpen] = React.useState(false);
 
-
-
 	return (
 		<div className='sort'>
 			<div className='sort__label'>
@@ -22,15 +20,15 @@ function Sort1() {
 				<b>Сортировка по:</b>
 				<span onClick={() => setOpen(!open)}>популярности</span>
 			</div>
-			{open &&
-				(<div className='sort__popup'>
+			{open && (
+				<div className='sort__popup'>
 					<ul>
 						<li className='active'>популярности</li>
 						<li>цене</li>
 						<li>алфавиту</li>
 					</ul>
-				</div>)
-			}
+				</div>
+			)}
 		</div>
 	);
 }

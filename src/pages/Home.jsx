@@ -9,17 +9,15 @@ export const Home = () => {
 	const [items, setItems] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [categoryId, setCategoryId] = React.useState(0);
-	const [sortType, setSortType] = React.useState(0);
-
-	console.log(sortType);
+	const [sortType, setSortType] = React.useState({
+		sortProperty: 'rating',
+		order: 'desc',
+	});
 
 	React.useEffect(() => {
-		setIsLoading(true);
+		const category = categoryId > 0 ? `category=${categoryId}` : ``;
 
-		const url =
-			categoryId === 0
-				? 'https://6a819e35400f94b23c6f89a1.mockapi.io/items'
-				: `https://6a819e35400f94b23c6f89a1.mockapi.io/items?category=${categoryId}&sortBy=${sortType.sortProperty}&order=desc`;
+		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?${category}&sortBy=${sortType.sortProperty}&order=${sortType.order}`;
 
 		fetch(url)
 			.then(res => res.json())
