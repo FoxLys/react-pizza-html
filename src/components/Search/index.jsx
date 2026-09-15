@@ -1,19 +1,6 @@
-import { debounce } from 'lodash';
-import React from 'react';
 import style from './Search.module.scss';
 
 export const Search = ({ searchValue, setSearchValue }) => {
-	const debouncedSearch = React.useMemo(() =>
-		debounce(searchTerm => {
-			console.log('Шукаємо:', searchTerm);
-		}, 500),
-	);
-
-	const onChangeSearch = e => {
-		const value = e.target.value;
-		debouncedSearch(value);
-	};
-
 	return (
 		<div className={style.root}>
 			<svg
@@ -51,10 +38,36 @@ export const Search = ({ searchValue, setSearchValue }) => {
 				></line>
 			</svg>
 			<input
-				onChange={onChangeSearch}
+				value={searchValue}
+				onChange={event => setSearchValue(event.target.value)}
 				className={style.input}
 				placeholder='Поиск pizza...'
 			/>
+			{searchValue && (
+				<button
+					type='button'
+					onMouseDown={e => {
+						e.preventDefault(); // дуже важливо!
+						setSearchValue('');
+					}}
+					className={style.clearIcon}
+					aria-label='clear Search'
+				>
+					<svg
+						viewBox='0 0 20 20'
+						fill='none'
+						xmlns='http://www.w3.org/2000/svg'
+						aria-hidden='true'
+					>
+						<path
+							d='M5 5L19 19M19 5L5 19'
+							stroke='currentColor'
+							strokeWidth='2.5'
+							strokeLinecap='round'
+						/>
+					</svg>
+				</button>
+			)}
 		</div>
 	);
 };

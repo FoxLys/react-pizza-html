@@ -5,6 +5,8 @@ import '../scss/components/_header.scss';
 import Search from './Search';
 
 function Header({ searchValue, setSearchValue }) {
+
+
 	return (
 		<div className='header'>
 			<div className='container'>
