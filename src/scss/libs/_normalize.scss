@@ -1,21 +1,21 @@
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
   list-style: none;
   outline: none;
-  font-family: 'Nunito', Roboto, system-ui, Tahoma, sans-serif;
+  font-family: Nunito, Roboto, system-ui, Tahoma, sans-serif;
   box-sizing: border-box;
 }
 
 html {
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
+  color: $black;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: $black;
 }
 
 a,
@@ -35,8 +35,8 @@ h1 {
 }
 
 h2 {
-  font-weight: 600;
   font-size: 28px;
+  font-weight: 600;
   line-height: 30px;
 }
 
@@ -46,10 +46,10 @@ a {
 
 @mixin noselect {
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Safari */
+  user-select: none; /* Konqueror HTML */
+  user-select: none; /* Old versions of Firefox */
+  user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }

@@ -2,6 +2,7 @@
 
 .sort {
 	position: relative;
+
 	&__label {
 		display: flex;
 		align-items: center;
@@ -24,27 +25,28 @@
 	&__popup {
 		position: absolute;
 		right: 0;
-		margin-top: 15px;
-		background: #ffffff;
-		box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.09);
-		border-radius: 10px;
-		overflow: hidden;
 		padding: 10px 0;
+		border-radius: 10px;
+		background: #fff;
+		margin-top: 15px;
+		box-shadow: 0 5px 15px rgb(0 0 0 / 9%);
+		overflow: hidden;
 
 		ul {
 			overflow: hidden;
+
 			li {
 				padding: 12px 20px;
 				cursor: pointer;
 
 				&.active,
 				&:hover {
-					background: rgba(254, 95, 30, 0.05);
+					background: rgb(254 95 30 / 5%);
 				}
 
 				&.active {
-					font-weight: bold;
 					color: $orange;
+					font-weight: bold;
 				}
 			}
 		}

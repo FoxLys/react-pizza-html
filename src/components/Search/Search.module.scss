@@ -2,44 +2,47 @@
 	position: relative;
 	left: -120px;
 }
+
 .input {
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	padding: 12px 20px;
-	padding-left: 42px;
 	width: 300px;
+	padding: 12px 20px;
+	border: 1px solid rgb(0 0 0 / 10%);
 	border-radius: 10px;
 	font-size: 16px;
+	padding-left: 42px;
 	transition: all 0.15s ease-in-out;
+
 	&:focus {
-		border: 1px solid rgba(0, 0, 0, 0.2);
 		width: 450px;
+		border: 1px solid rgb(0 0 0 / 20%);
 	}
 }
 
 .icon {
+	position: absolute;
+	top: 12px;
+	left: 12px;
 	width: 21px;
 	height: 21px;
 	opacity: 0.5;
-	position: absolute;
-	left: 12px;
-	top: 12px;
 	background-size: 1%;
 }
+
 .clearIcon {
-  width: 18px;
-  height: 18px;
-  opacity: 0.3;
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: none;
+  opacity: 0.3;
+  transform: translateY(-50%);
+  cursor: pointer;
   z-index: 2;
 
   &:hover {

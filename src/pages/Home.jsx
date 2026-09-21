@@ -1,42 +1,47 @@
-import React from 'react'
+import React from 'react';
 
-import Categories from '../components/Categories'
-import PizzaBlock from '../components/PizzaBlock'
-import Skeleton from '../components/PizzaBlock/Skeleton'
-import Sort from '../components/Sort'
+import Categories from '../components/Categories';
+import Pagination from '../components/Pagination';
+import PizzaBlock from '../components/PizzaBlock';
+import Skeleton from '../components/PizzaBlock/Skeleton';
+import Sort from '../components/Sort';
+import { max, min } from 'lodash';
 
 export const Home = ({ searchValue }) => {
-	const [items, setItems] = React.useState([])
-	const [isLoading, setIsLoading] = React.useState(true)
-	const [categoryId, setCategoryId] = React.useState(0)
+	const [items, setItems] = React.useState([]);
+	const [isLoading, setIsLoading] = React.useState(true);
+	const [categoryId, setCategoryId] = React.useState(0);
+	const [currentPage, setCurrentPage] = React.useState(1);
 	const [sortType, setSortType] = React.useState({
 		sortProperty: 'rating',
 		order: 'desc',
-	})
+	});
 
 	const skeletons = [...new Array(6)].map((_, index) => (
 		<Skeleton key={index} />
-	))
+	));
 
 	const pizzas = items
 		.filter(obj => {
-			if (!searchValue) return true
-			return obj.title.toLowerCase().includes(searchValue.toLowerCase())
+			if (!searchValue) return true;
+			return obj.title.toLowerCase().includes(searchValue.toLowerCase());
 		})
-		.map(obj => <PizzaBlock key={obj.id} {...obj} />)
+		.map(obj => <PizzaBlock key={obj.id} {...obj} />);
 
 	React.useEffect(() => {
-		const category = categoryId > 0 ? `category=${categoryId}` : ``
-		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?${category}&sortBy=${sortType.sortProperty}&order=${sortType.order}`
+		const category = categoryId > 0 ? `category=${categoryId}` : ``;
+		const search = searchValue ? `search=${searchValue}` : '';
+
+		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortType.sortProperty}&order=${sortType.order}&${search}`;
 
 		fetch(url)
 			.then(res => res.json())
 			.then(arr => {
-				setItems(arr)
-				setIsLoading(false)
-			})
-		window.scrollTo(0, 0)
-	}, [categoryId, sortType])
+				setItems(arr);
+				setIsLoading(false);
+			});
+		window.scrollTo(0, 0); // <-- скролить на верх
+	}, [categoryId, sortType, searchValue, currentPage]);
 
 	return (
 		<div className='container'>
@@ -48,9 +53,11 @@ export const Home = ({ searchValue }) => {
 				<Sort sortValue={sortType} onChangeSort={i => setSortType(i)} />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
+			<Pagination currentPage={currentPage} onChangePage={setCurrentPage} pageCount={3} />
 			<div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+			<Pagination currentPage={currentPage} onChangePage={setCurrentPage} pageCount={3} />
 		</div>
-	)
-}
+	);
+};
 
-export default Home
+export default Home;

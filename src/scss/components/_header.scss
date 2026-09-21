@@ -1,15 +1,15 @@
 @import '../variables';
 
 .header {
-	border-bottom: 1px solid $gray-line;
 	padding: 40px 0;
+	border-bottom: 1px solid $gray-line;
 
 	.container {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 
-		@media (max-width: 645px) {
+		@media (width <= 645px) {
 			flex-direction: column;
 
 			.header__cart {
