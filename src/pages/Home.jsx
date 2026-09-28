@@ -7,7 +7,11 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
 import { max, min } from 'lodash';
 
-export const Home = ({ searchValue }) => {
+import { SearchContext } from '../App.js';
+
+export const Home = () => {
+	const { searchValue } = React.useContext(SearchContext);
+
 	const [items, setItems] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [categoryId, setCategoryId] = React.useState(0);
@@ -21,13 +25,12 @@ export const Home = ({ searchValue }) => {
 		<Skeleton key={index} />
 	));
 
-	const pizzas = items
+	const pizzas = (Array.isArray(items) ? items : [])
 		.filter(obj => {
 			if (!searchValue) return true;
 			return obj.title.toLowerCase().includes(searchValue.toLowerCase());
 		})
 		.map(obj => <PizzaBlock key={obj.id} {...obj} />);
-
 	React.useEffect(() => {
 		const category = categoryId > 0 ? `category=${categoryId}` : ``;
 		const search = searchValue ? `search=${searchValue}` : '';
@@ -37,9 +40,10 @@ export const Home = ({ searchValue }) => {
 		fetch(url)
 			.then(res => res.json())
 			.then(arr => {
-				setItems(arr);
 				setIsLoading(false);
-			});
+				setItems(Array.isArray(arr) ? arr : []);
+			})
+			.catch(() => setItems([]));
 		window.scrollTo(0, 0); // <-- скролить на верх
 	}, [categoryId, sortType, searchValue, currentPage]);
 
@@ -53,9 +57,17 @@ export const Home = ({ searchValue }) => {
 				<Sort sortValue={sortType} onChangeSort={i => setSortType(i)} />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<Pagination currentPage={currentPage} onChangePage={setCurrentPage} pageCount={3} />
+			<Pagination
+				currentPage={currentPage}
+				onChangePage={setCurrentPage}
+				pageCount={3}
+			/>
 			<div className='content__items'>{isLoading ? skeletons : pizzas}</div>
-			<Pagination currentPage={currentPage} onChangePage={setCurrentPage} pageCount={3} />
+			<Pagination
+				currentPage={currentPage}
+				onChangePage={setCurrentPage}
+				pageCount={3}
+			/>
 		</div>
 	);
 };
