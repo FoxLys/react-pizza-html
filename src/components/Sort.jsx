@@ -1,5 +1,15 @@
 import React from 'react';
-function Sort({ sortValue, onChangeSort }) {
+import { useDispatch, useSelector } from 'react-redux';
+
+function Sort() {
+	const dispatch = useDispatch();
+	const sort = useSelector(state => state.filters.sort);
+
+	setTimeout(() => {
+		console.log(sort);
+	}, 2500);
+
+
 	const sortName = [
 		{
 			name: 'популярности (DESC)',
@@ -35,9 +45,7 @@ function Sort({ sortValue, onChangeSort }) {
 	const [open, setOpen] = React.useState(false);
 
 	const currentSort = sortName.find(
-		obj =>
-			obj.sortProperty === sortValue.sortProperty &&
-			obj.order === sortValue.order,
+		obj => obj.sortProperty === sort.sortProperty && obj.order === sort.order,
 	);
 
 	return (
@@ -65,10 +73,10 @@ function Sort({ sortValue, onChangeSort }) {
 						{sortName.map(obj => (
 							<li
 								key={`${obj.sortProperty} - ${obj.order}`}
-								onClick={() => onChangeSort(obj)}
+								onClick={console.log(obj)}
 								className={
-									sortValue.sortProperty === obj.sortProperty &&
-									sortValue.order === obj.order
+									sort.sortProperty === obj.sortProperty &&
+									sort.order === obj.order
 										? 'active'
 										: ''
 								}

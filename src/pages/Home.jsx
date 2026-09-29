@@ -5,21 +5,29 @@ import Pagination from '../components/Pagination';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
-import { max, min } from 'lodash';
 
 import { SearchContext } from '../App.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCategoryId } from '../redux/slices/filterSlice.js';
 
 export const Home = () => {
+	const dispatch = useDispatch();
+	const categoryId = useSelector(state => state.filters.categoryId);
+	const sortType = useSelector(state => state.filters.sort.sortProperty);
 	const { searchValue } = React.useContext(SearchContext);
 
 	const [items, setItems] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
-	const [categoryId, setCategoryId] = React.useState(0);
+	// const [categoryId, setCategoryId] = React.useState(0);
 	const [currentPage, setCurrentPage] = React.useState(1);
-	const [sortType, setSortType] = React.useState({
-		sortProperty: 'rating',
-		order: 'desc',
-	});
+	// const [sortType, setSortType] = React.useState({
+	// 	sortProperty: 'rating',
+	// 	order: 'desc',
+	// });
+
+	const onChangeCategory = id => {
+		dispatch(setCategoryId(id));
+	};
 
 	const skeletons = [...new Array(6)].map((_, index) => (
 		<Skeleton key={index} />
@@ -50,11 +58,8 @@ export const Home = () => {
 	return (
 		<div className='container'>
 			<div className='content__top'>
-				<Categories
-					value={categoryId}
-					onChangeCategory={id => setCategoryId(id)}
-				/>
-				<Sort sortValue={sortType} onChangeSort={i => setSortType(i)} />
+				<Categories value={categoryId} onChangeCategory={onChangeCategory} />
+				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
 			<Pagination
