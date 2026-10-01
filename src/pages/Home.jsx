@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
@@ -9,11 +10,12 @@ import Sort from '../components/Sort';
 import { SearchContext } from '../App.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryId } from '../redux/slices/filterSlice.js';
+import { setSort } from '../redux/slices/filterSlice.js';
 
 export const Home = () => {
 	const dispatch = useDispatch();
-	const categoryId = useSelector(state => state.filters.categoryId);
-	const sortType = useSelector(state => state.filters.sort.sortProperty);
+	const { categoryId, sort } = useSelector(state => state.filters);
+	const sortOrder = useSelector(state => state.filters.sort.order);
 	const { searchValue } = React.useContext(SearchContext);
 
 	const [items, setItems] = React.useState([]);
@@ -39,21 +41,23 @@ export const Home = () => {
 			return obj.title.toLowerCase().includes(searchValue.toLowerCase());
 		})
 		.map(obj => <PizzaBlock key={obj.id} {...obj} />);
+
 	React.useEffect(() => {
 		const category = categoryId > 0 ? `category=${categoryId}` : ``;
 		const search = searchValue ? `search=${searchValue}` : '';
 
-		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortType.sortProperty}&order=${sortType.order}&${search}`;
+		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort.sortProperty}&order=${sortOrder}&${search}`;
 
-		fetch(url)
-			.then(res => res.json())
-			.then(arr => {
+		axios
+			.get(url)
+			.then(res => {
+				setItems(Array.isArray(res.data) ? res.data : []);
 				setIsLoading(false);
-				setItems(Array.isArray(arr) ? arr : []);
 			})
 			.catch(() => setItems([]));
+
 		window.scrollTo(0, 0); // <-- скролить на верх
-	}, [categoryId, sortType, searchValue, currentPage]);
+	}, [categoryId, sort.sortProperty, sortOrder, searchValue, currentPage]);
 
 	return (
 		<div className='container'>

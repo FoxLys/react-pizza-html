@@ -1,14 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setSort } from '../redux/slices/filterSlice.js';
 
 function Sort() {
 	const dispatch = useDispatch();
 	const sort = useSelector(state => state.filters.sort);
-
-	setTimeout(() => {
-		console.log(sort);
-	}, 2500);
-
 
 	const sortName = [
 		{
@@ -73,7 +69,7 @@ function Sort() {
 						{sortName.map(obj => (
 							<li
 								key={`${obj.sortProperty} - ${obj.order}`}
-								onClick={console.log(obj)}
+								onClick={() => dispatch(setSort(obj))}
 								className={
 									sort.sortProperty === obj.sortProperty &&
 									sort.order === obj.order

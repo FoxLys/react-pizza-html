@@ -1,10 +1,34 @@
+/** @type {React.RefObject<HTMLInputElement>} */
 import style from './Search.module.scss';
+import debounce from 'lodash.debounce';
 import React from 'react';
 
 import { SearchContext } from '../../App.js';
 
 export const Search = () => {
+	const [value, setValue] = React.useState('');
 	const { searchValue, setSearchValue } = React.useContext(SearchContext);
+	const inputRef = React.useRef();
+
+	const onClickClearInput = e => {
+		e.preventDefault(); //
+		setSearchValue('');
+		setValue('');
+		inputRef.current.focus();
+	};
+
+	const updateSearchValue = React.useCallback(
+		debounce(str => {
+			setSearchValue(str);
+		}, 1000),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[],
+	);
+
+	const onChangeInput = event => {
+		setValue(event.target.value);
+		updateSearchValue(event.target.value);
+	};
 
 	return (
 		<div className={style.root}>
@@ -43,18 +67,16 @@ export const Search = () => {
 				></line>
 			</svg>
 			<input
-				value={searchValue}
-				onChange={event => setSearchValue(event.target.value)}
+				ref={inputRef}
+				value={value}
+				onChange={onChangeInput}
 				className={style.input}
 				placeholder='Поиск pizza...'
 			/>
 			{searchValue && (
 				<button
 					type='button'
-					onMouseDown={e => {
-						e.preventDefault(); // дуже важливо!
-						setSearchValue('');
-					}}
+					onMouseDown={onClickClearInput}
 					className={style.clearIcon}
 					aria-label='clear Search'
 				>
