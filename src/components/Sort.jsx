@@ -2,50 +2,64 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSort } from '../redux/slices/filterSlice.js';
 
+export const sortList = [
+	{
+		name: 'популярности (DESC)',
+		sortProperty: 'rating',
+		order: 'desc',
+	},
+	{
+		name: 'популярности (ASC)',
+		sortProperty: 'rating',
+		order: 'asc',
+	},
+	{
+		name: 'цене (DESC)',
+		sortProperty: 'price',
+		order: 'desc',
+	},
+	{
+		name: 'цене (ASC)',
+		sortProperty: 'price',
+		order: 'asc',
+	},
+	{
+		name: 'алфавиту (DESC)',
+		sortProperty: 'title',
+		order: 'desc',
+	},
+	{
+		name: 'алфавиту (ASC)',
+		sortProperty: 'title',
+		order: 'asc',
+	},
+];
 function Sort() {
 	const dispatch = useDispatch();
 	const sort = useSelector(state => state.filters.sort);
+	const sortRef = React.useRef();
+	console.log(sortRef);
 
-	const sortName = [
-		{
-			name: 'популярности (DESC)',
-			sortProperty: 'rating',
-			order: 'desc',
-		},
-		{
-			name: 'популярности (ASC)',
-			sortProperty: 'rating',
-			order: 'asc',
-		},
-		{
-			name: 'цене (DESC)',
-			sortProperty: 'price',
-			order: 'desc',
-		},
-		{
-			name: 'цене (ASC)',
-			sortProperty: 'price',
-			order: 'asc',
-		},
-		{
-			name: 'алфавиту (DESC)',
-			sortProperty: 'title',
-			order: 'desc',
-		},
-		{
-			name: 'алфавиту (ASC)',
-			sortProperty: 'title',
-			order: 'asc',
-		},
-	];
 	const [open, setOpen] = React.useState(false);
 
-	const currentSort = sortName.find(
+	const currentSort = sortList.find(
 		obj => obj.sortProperty === sort.sortProperty && obj.order === sort.order,
 	);
 
+	React.useEffect(() => {
+		const handleClickOutside = event => {
+			if (!event.composedPath().includes(sortRef.current)) {
+				setOpen(false);
+			}
+		};
+		document.body.addEventListener('click', handleClickOutside);
+
+		return () => {
+			document.body.removeEventListener('click', handleClickOutside);
+		};
+	}, []);
 	return (
-		<div className='sort'>
+		<div ref={sortRef} className='sort'>
 			<div className='sort__label'>
 				<svg
 					onClick={() => setOpen(!open)}
@@ -66,7 +80,7 @@ function Sort() {
 			{open && (
 				<div className='sort__popup'>
 					<ul>
-						{sortName.map(obj => (
+						{sortList.map(obj => (
 							<li
 								key={`${obj.sortProperty} - ${obj.order}`}
 								onClick={() => dispatch(setSort(obj))}

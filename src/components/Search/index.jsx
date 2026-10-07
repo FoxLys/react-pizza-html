@@ -17,12 +17,12 @@ export const Search = () => {
 		inputRef.current.focus();
 	};
 
-	const updateSearchValue = React.useCallback(
-		debounce(str => {
-			setSearchValue(str);
-		}, 1000),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[],
+	const updateSearchValue = React.useMemo(
+		() =>
+			debounce(str => {
+				setSearchValue(str);
+			}, 250),
+		[setSearchValue],
 	);
 
 	const onChangeInput = event => {
