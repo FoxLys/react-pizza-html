@@ -38,7 +38,7 @@ function Sort() {
 	const dispatch = useDispatch();
 	const sort = useSelector(state => state.filters.sort);
 	const sortRef = React.useRef();
-	console.log(sortRef);
+
 
 	const [open, setOpen] = React.useState(false);
 
