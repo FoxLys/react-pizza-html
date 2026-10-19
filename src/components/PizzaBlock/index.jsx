@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addItems } from '../../redux/slices/cartSlice';
+import { addItem } from '../../redux/slices/cartSlice';
 
 //тип піци вибрано
 const typeName = ['тонкое', 'традиционное'];
@@ -33,7 +33,7 @@ function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
 			size: whatSizesChosen,
 		};
 		// setPizzaCount(prev => prev + 1);
-		dispatch(addItems(item));
+		dispatch(addItem(item));
 	};
 	return (
 		<div className='pizza-block-wrapper'>
