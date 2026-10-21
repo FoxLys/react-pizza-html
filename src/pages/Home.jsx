@@ -32,21 +32,28 @@ export const Home = () => {
 	// відповідає за Api
 	const [items, setItems] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState(true);
-	const fetchPizza = () => {
+
+	const fetchPizza = async () => {
 		setIsLoading(true);
 		const category = categoryId > 0 ? `category=${categoryId}` : ``;
 		const search = searchValue ? `search=${searchValue}` : '';
 
 		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort.sortProperty}&order=${sortOrder}&${search}`;
 
-		axios
-			.get(url)
-			.then(res => {
-				setItems(Array.isArray(res.data) ? res.data : []);
-				setIsLoading(false);
-			})
-			.catch(() => setItems([]))
-			.finally(() => setIsLoading(false));
+		// 	axios
+		// 		.get(url)
+		// 		.then(res => {
+		// 			setItems(Array.isArray(res.data) ? res.data : []);
+		// 			setIsLoading(false);
+		// 		})
+		// 		.catch(() => setItems([]))
+		// 		.finally(() => setIsLoading(false));
+		// };
+		const res = await axios.get(url);
+		setItems(Array.isArray(res.data) ? res.data : []);
+		setIsLoading(false);
+
+		window.scroll(0, 0);
 	};
 
 	const onChangeCategory = id => {

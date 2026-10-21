@@ -30,7 +30,7 @@ function PizzaBlock({ id, title, price, imageUrl, sizes, types }) {
 			price,
 			imageUrl,
 			type: typeName[whatTypeChosen],
-			size: whatSizesChosen,
+			size: sizes[whatSizesChosen],
 		};
 		// setPizzaCount(prev => prev + 1);
 		dispatch(addItem(item));
