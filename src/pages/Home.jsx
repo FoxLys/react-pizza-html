@@ -1,5 +1,4 @@
 import React from 'react'; // бібліотека (вбудована в react)
-import axios from 'axios'; // бібліотека (заінстальована) по запросам на сервер, зручніша заміна fetch
 import qs from 'qs'; // бібліотека (заінстальована) відповідає за витагування даних запросу до сервера в формі string
 
 import Categories from '../components/Categories';
@@ -16,6 +15,7 @@ import {
 	setCurrentPage,
 	setFilters,
 } from '../redux/slices/filterSlice.js';
+import { fetchPizzas } from '../redux/slices/pizzaSlice.js';
 import { sortList } from '../components/Sort';
 
 export const Home = () => {
@@ -30,28 +30,21 @@ export const Home = () => {
 	const { searchValue } = React.useContext(SearchContext);
 
 	// відповідає за Api
-	const [items, setItems] = React.useState([]);
-	const [isLoading, setIsLoading] = React.useState(true);
+	const { items, status } = useSelector(state => state.pizzas);
 
-	const fetchPizza = async () => {
-		setIsLoading(true);
+	const getPizzas = async () => {
 		const category = categoryId > 0 ? `category=${categoryId}` : ``;
 		const search = searchValue ? `search=${searchValue}` : '';
 
-		const url = `https://6a819e35400f94b23c6f89a1.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort.sortProperty}&order=${sortOrder}&${search}`;
-
-		// 	axios
-		// 		.get(url)
-		// 		.then(res => {
-		// 			setItems(Array.isArray(res.data) ? res.data : []);
-		// 			setIsLoading(false);
-		// 		})
-		// 		.catch(() => setItems([]))
-		// 		.finally(() => setIsLoading(false));
-		// };
-		const res = await axios.get(url);
-		setItems(Array.isArray(res.data) ? res.data : []);
-		setIsLoading(false);
+		dispatch(
+			fetchPizzas({
+				currentPage,
+				sort,
+				sortOrder,
+				category,
+				search,
+			}),
+		);
 
 		window.scroll(0, 0);
 	};
@@ -112,8 +105,8 @@ export const Home = () => {
 	// якщо був перший рендер, то запрошуємо піци  підключення до mock API сервера і передавання адреси в URL bar
 	React.useEffect(() => {
 		window.scrollTo(0, 0);
-		fetchPizza();
-	}, [categoryId, sort.sortProperty, sortOrder, searchValue, currentPage]);
+		getPizzas();
+	}, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
 	return (
 		<div className='container'>
@@ -123,7 +116,18 @@ export const Home = () => {
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
 			<Pagination currentPage={currentPage} onChangePage={onChangePage} />
-			<div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+			{status === 'error' ? (
+				<div className='content__error-info'>
+					<h2>
+						Произошла Ошибка <icon>😕</icon>
+					</h2>
+					<p>К сожалению не удалось получить піци.</p>
+				</div>
+			) : (
+				<div className='content__items'>
+					{status === 'loading' ? skeletons : pizzas}
+				</div>
+			)}
 			<Pagination currentPage={currentPage} onChangePage={onChangePage} />
 		</div>
 	);
