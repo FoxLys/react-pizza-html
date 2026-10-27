@@ -1,6 +1,7 @@
 .root {
 	li {
 		display: inline-block;
+		margin-bottom: 12px;
 
 		a {
 			text-align: center;
@@ -24,8 +25,8 @@
 	:global {
 		.selected {
 			a {
-					background-color: #fe5f1e;
-					color: #fff;
+				background-color: #fe5f1e;
+				color: #fff;
 			}
 		}
 	}

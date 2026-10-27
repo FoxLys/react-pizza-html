@@ -15,7 +15,7 @@ import {
 	setCurrentPage,
 	setFilters,
 } from '../redux/slices/filterSlice.js';
-import { fetchPizzas } from '../redux/slices/pizzaSlice.js';
+import { fetchPizzas, selectorFilters } from '../redux/slices/pizzaSlice.js';
 import { sortList } from '../components/Sort';
 
 export const Home = () => {
@@ -25,8 +25,8 @@ export const Home = () => {
 	const isMounted = React.useRef(false);
 
 	// сортування в URL і в головній сторінці
-	const { categoryId, sort, currentPage } = useSelector(state => state.filters);
-	const sortOrder = useSelector(state => state.filters.sort.order);
+	const { categoryId, sort, currentPage } = useSelector(selectorFilters);
+	const sortOrder = sort.order;
 	const { searchValue } = React.useContext(SearchContext);
 
 	// відповідає за Api
