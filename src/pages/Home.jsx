@@ -7,15 +7,15 @@ import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
 
-import { SearchContext } from '../App.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
+	selectorFilters,
 	setCategoryId,
 	setCurrentPage,
 	setFilters,
 } from '../redux/slices/filterSlice.js';
-import { fetchPizzas, selectorFilters } from '../redux/slices/pizzaSlice.js';
+import { fetchPizzas, selectorPizzaData } from '../redux/slices/pizzaSlice.js';
 import { sortList } from '../components/Sort';
 
 export const Home = () => {
@@ -25,12 +25,14 @@ export const Home = () => {
 	const isMounted = React.useRef(false);
 
 	// сортування в URL і в головній сторінці
-	const { categoryId, sort, currentPage } = useSelector(selectorFilters);
+	// eslint-disable-next-line no-unused-vars
+	const { categoryId, sort, currentPage, setSearchValue } =
+		useSelector(selectorFilters);
 	const sortOrder = sort.order;
-	const { searchValue } = React.useContext(SearchContext);
+	const searchValue = useSelector(state => state.filters.searchValue);
 
 	// відповідає за Api
-	const { items, status } = useSelector(state => state.pizzas);
+	const { items, status } = useSelector(selectorPizzaData);
 
 	const getPizzas = async () => {
 		const category = categoryId > 0 ? `category=${categoryId}` : ``;
@@ -80,6 +82,7 @@ export const Home = () => {
 			navigate(`?${queryString}`);
 		}
 		isMounted.current = true;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categoryId, sort.sortProperty, currentPage]);
 
 	//1Якщо був перший рендер перевіряємо параметир і зберігаємо в Redux 2 парсинг url-значень в URL bar приклад "'?sortProperty=rating&categoryId=0&currentPage=1'"ф за допомогою redux
@@ -100,12 +103,14 @@ export const Home = () => {
 
 			isSearch.current = true;
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	// якщо був перший рендер, то запрошуємо піци  підключення до mock API сервера і передавання адреси в URL bar
 	React.useEffect(() => {
 		window.scrollTo(0, 0);
 		getPizzas();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
 	return (
